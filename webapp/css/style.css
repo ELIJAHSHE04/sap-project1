@@ -1,1 +1,29 @@
 /* Enter your custom styles here */
+
+/* Attendance text styling - blue color */
+.attendanceText {
+    color: #0070f2;
+    font-weight: 500;
+}
+
+/* Course list item styling */
+.sapMList .sapMLIB {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Panel header styling */
+.sapMPanel .sapMPanelHdr {
+    font-weight: 600;
+    font-size: 1.125rem;
+}
+
+/* ObjectHeader title styling */
+.sapMOHTitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Course title styling */
+.sapMTitle {
+    font-weight: 600;
+}

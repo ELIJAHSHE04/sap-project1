@@ -1,6 +1,77 @@
 <mvc:View controllerName="project1.controller.View1"
     xmlns:mvc="sap.ui.core.mvc"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:f="sap.f"
+    class="sapUiSizeCompact">
+    <Page id="page" title="Course Performance">
+        <content>
+            <!-- Student Information Header -->
+            <ObjectHeader
+                id="studentHeader"
+                title="{/student/name}"
+                number="{/student/gpa}"
+                numberUnit="{/student/gpaStatus}"
+                intro="{/student/studentId}"
+                icon="sap-icon://person-placeholder"
+                iconDensityAware="false"
+                responsive="true">
+                <attributes>
+                    <ObjectAttribute 
+                        title="Program"
+                        text="{/student/program}"/>
+                </attributes>
+                <statuses>
+                    <ObjectStatus 
+                        text="Current GPA: {/student/gpa}"
+                        state="Success"
+                        class="sapUiMediumMarginEnd"/>
+                    <ObjectStatus 
+                        text="Total Credits: {/student/totalCredits}"
+                        class="sapUiMediumMarginEnd"/>
+                    <ObjectStatus 
+                        text="Attendance Avg: {/student/attendanceAvg}%"
+                        state="Success"
+                        class="sapUiMediumMarginEnd"/>
+                </statuses>
+            </ObjectHeader>
+
+            <!-- Course List Section -->
+            <Panel 
+                id="coursePanel"
+                headerText="Current Semester Courses ({/courses/length})"
+                class="sapUiMediumMargin">
+                <content>
+                    <List
+                        id="courseList"
+                        items="{/courses}"
+                        mode="None"
+                        class="sapUiNoContentPadding">
+                        <CustomListItem>
+                            <HBox class="sapUiSmallMargin" alignItems="Center" justifyContent="SpaceBetween">
+                                <VBox class="sapUiSmallMarginBegin">
+                                    <Title 
+                                        text="{courseCode} {courseName}"
+                                        level="H3"
+                                        class="sapUiTinyMarginBottom"/>
+                                    <Text 
+                                        text="Section {section} • {credits} Credits"
+                                        class="sapUiTinyMarginTop"/>
+                                </VBox>
+                                <VBox alignItems="End" class="sapUiSmallMarginEnd">
+                                    <ObjectStatus
+                                        text="Grade {grade} ({score}%)"
+                                        state="{gradeState}"
+                                        class="sapUiTinyMarginBottom"/>
+                                    <Text 
+                                        text="Attendance: {attendance}%"
+                                        class="sapUiTinyMarginTop attendanceText"/>
+                                </VBox>
+                            </HBox>
+                        </CustomListItem>
+                    </List>
+                </content>
+            </Panel>
+        </content>
     </Page>
 </mvc:View>
