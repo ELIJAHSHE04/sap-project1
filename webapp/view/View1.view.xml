@@ -47,27 +47,117 @@
                         items="{/courses}"
                         mode="None"
                         class="sapUiNoContentPadding">
-                        <CustomListItem>
-                            <HBox class="sapUiSmallMargin" alignItems="Center" justifyContent="SpaceBetween">
-                                <VBox class="sapUiSmallMarginBegin">
-                                    <Title 
-                                        text="{courseCode} {courseName}"
-                                        level="H3"
-                                        class="sapUiTinyMarginBottom"/>
-                                    <Text 
-                                        text="Section {section} • {credits} Credits"
-                                        class="sapUiTinyMarginTop"/>
+                        <CustomListItem type="Active" press=".onPressCourse">
+                            <VBox class="sapUiSmallMargin">
+                                <!-- Course Basic Info -->
+                                <HBox alignItems="Center" justifyContent="SpaceBetween" class="sapUiSmallMarginBottom">
+                                    <VBox class="sapUiSmallMarginBegin">
+                                        <Title 
+                                            text="{courseCode} {courseName}"
+                                            level="H3"
+                                            class="sapUiTinyMarginBottom"/>
+                                        <Text 
+                                            text="Section {section} • {credits} Credits"
+                                            class="sapUiTinyMarginTop"/>
+                                    </VBox>
+                                    <VBox alignItems="End" class="sapUiSmallMarginEnd">
+                                        <ObjectStatus
+                                            text="Grade {grade} ({score}%)"
+                                            state="{gradeState}"
+                                            class="sapUiTinyMarginBottom"/>
+                                        <Text 
+                                            text="Attendance: {attendance}%"
+                                            class="sapUiTinyMarginTop attendanceText"/>
+                                    </VBox>
+                                </HBox>
+
+                                <!-- Course Details (Expandable) -->
+                                <VBox visible="{expanded}" class="sapUiMediumMarginTop courseDetailsContainer">
+                                    <HBox class="sapUiMediumMarginTop" justifyContent="SpaceAround">
+                                        <!-- Left Panel: Assessment Structure -->
+                                        <VBox class="sapUiSmallMargin assessmentPanel">
+                                            <Title text="Assessment Structure" level="H4" class="sapUiSmallMarginBottom"/>
+                                            <List
+                                                items="{details/assessments}"
+                                                mode="None"
+                                                showSeparators="None"
+                                                class="sapUiNoContentPadding">
+                                                <CustomListItem>
+                                                    <VBox class="sapUiTinyMargin">
+                                                        <HBox justifyContent="SpaceBetween" alignItems="Center" class="sapUiTinyMarginBottom">
+                                                            <Text text="{name} ({weight}%)" class="assessmentName"/>
+                                                            <Text text="{score}/{maxScore}" class="assessmentScore"/>
+                                                        </HBox>
+                                                        <ProgressIndicator
+                                                            percentValue="{percentage}"
+                                                            displayValue="{score}/{maxScore}"
+                                                            showValue="false"
+                                                            state="None"
+                                                            class="assessmentProgress"/>
+                                                        <HBox class="sapUiTinyMarginTop" visible="{= ${status} === 'Pending' || ${status} === 'Scheduled'}">
+                                                            <ObjectStatus
+                                                                text="{status}"
+                                                                state="{= ${status} === 'Pending' ? 'Warning' : 'Information'}"
+                                                                visible="{= ${status} === 'Pending'}"
+                                                                class="sapUiTinyMarginEnd"/>
+                                                            <Text 
+                                                                text="{scheduledDate}"
+                                                                visible="{= ${status} === 'Scheduled'}"
+                                                                class="scheduledDateText"/>
+                                                        </HBox>
+                                                    </VBox>
+                                                </CustomListItem>
+                                            </List>
+                                            <HBox class="sapUiSmallMarginTop sapUiMediumMarginTop">
+                                                <Text 
+                                                    text="Total Carry Marks: {details/totalCarryMarks}/{details/totalCarryMarksMax}"
+                                                    class="totalMarksText"/>
+                                            </HBox>
+                                        </VBox>
+
+                                        <!-- Middle Panel: Attendance Record -->
+                                        <VBox class="sapUiSmallMargin attendancePanel" alignItems="Center">
+                                            <Title text="Attendance Record" level="H4" class="sapUiSmallMarginBottom"/>
+                                            <!-- Donut Chart Simulation -->
+                                            <VBox alignItems="Center" class="donutChartContainer">
+                                                <VBox class="donutChart" alignItems="Center" justifyContent="Center">
+                                                    <Text 
+                                                        text="{attendance}%"
+                                                        class="donutChartCenter"/>
+                                                </VBox>
+                                            </VBox>
+                                            <!-- Legend -->
+                                            <VBox class="sapUiSmallMarginTop" alignItems="Start">
+                                                <HBox class="sapUiTinyMarginBottom" alignItems="Center">
+                                                    <core:Icon src="sap-icon://circle-task-2" color="#4CAF50" class="sapUiTinyMarginEnd legendIcon"/>
+                                                    <Text text="Present ({details/attendanceDetail/present})"/>
+                                                </HBox>
+                                                <HBox class="sapUiTinyMarginBottom" alignItems="Center">
+                                                    <core:Icon src="sap-icon://circle-task-2" color="#F44336" class="sapUiTinyMarginEnd legendIcon"/>
+                                                    <Text text="Absent ({details/attendanceDetail/absent})"/>
+                                                </HBox>
+                                                <HBox class="sapUiTinyMarginBottom" alignItems="Center">
+                                                    <core:Icon src="sap-icon://circle-task-2" color="#FF9800" class="sapUiTinyMarginEnd legendIcon"/>
+                                                    <Text text="Excused ({details/attendanceDetail/excused})"/>
+                                                </HBox>
+                                            </VBox>
+                                        </VBox>
+
+                                        <!-- Right Panel: Course Insights -->
+                                        <VBox class="sapUiSmallMargin insightsPanel">
+                                            <Title text="Course Insights" level="H4" class="sapUiSmallMarginBottom"/>
+                                            <Text 
+                                                text="{details/insights}"
+                                                class="insightsText"/>
+                                            <Button
+                                                text="Email Lecturer"
+                                                icon="sap-icon://email"
+                                                press=".onEmailLecturer"
+                                                class="sapUiSmallMarginTop emailButton"/>
+                                        </VBox>
+                                    </HBox>
                                 </VBox>
-                                <VBox alignItems="End" class="sapUiSmallMarginEnd">
-                                    <ObjectStatus
-                                        text="Grade {grade} ({score}%)"
-                                        state="{gradeState}"
-                                        class="sapUiTinyMarginBottom"/>
-                                    <Text 
-                                        text="Attendance: {attendance}%"
-                                        class="sapUiTinyMarginTop attendanceText"/>
-                                </VBox>
-                            </HBox>
+                            </VBox>
                         </CustomListItem>
                     </List>
                 </content>
